@@ -10,59 +10,46 @@ import numpy.random
 
 import tensorflow as tf
 
-FLAGS = tf.app.flags.FLAGS
-
+flags = tf.app.flags
 # Configuration (alphabetically)
-tf.app.flags.DEFINE_integer('batch_size', 16,
+flags.DEFINE_integer('batch_size', 16,
                             "Number of samples per batch.")
-
-tf.app.flags.DEFINE_string('checkpoint_dir', 'checkpoint',
+flags.DEFINE_string('checkpoint_dir', 'checkpoint',
                            "Output folder where checkpoints are dumped.")
-
-tf.app.flags.DEFINE_integer('checkpoint_period', 10000,
+flags.DEFINE_integer('checkpoint_period', 10000,
                             "Number of batches in between checkpoints")
-
-tf.app.flags.DEFINE_string('dataset', 'dataset',
+flags.DEFINE_string('dataset', '../../Datasets/img_align_celeba',
                            "Path to the dataset directory.")
-
-tf.app.flags.DEFINE_float('epsilon', 1e-8,
+flags.DEFINE_float('epsilon', 1e-8,
                           "Fuzz term to avoid numerical instability")
-
-tf.app.flags.DEFINE_string('run', 'demo',
+flags.DEFINE_string('run', 'train',
                             "Which operation to run. [demo|train]")
-
-tf.app.flags.DEFINE_float('gene_l1_factor', .90,
+flags.DEFINE_float('gene_l1_factor', .90,
                           "Multiplier for generator L1 loss term")
-
-tf.app.flags.DEFINE_float('learning_beta1', 0.5,
+flags.DEFINE_float('learning_beta1', 0.5,
                           "Beta1 parameter used for AdamOptimizer")
-
-tf.app.flags.DEFINE_float('learning_rate_start', 0.00020,
+flags.DEFINE_float('learning_rate_start', 0.00020,
                           "Starting learning rate used for AdamOptimizer")
-
-tf.app.flags.DEFINE_integer('learning_rate_half_life', 5000,
+flags.DEFINE_integer('learning_rate_half_life', 5000,
                             "Number of batches until learning rate is halved")
-
-tf.app.flags.DEFINE_bool('log_device_placement', False,
+flags.DEFINE_bool('log_device_placement', False,
                          "Log the device where variables are placed.")
-
-tf.app.flags.DEFINE_integer('sample_size', 64,
+flags.DEFINE_integer('sample_size', 64,
                             "Image sample size in pixels. Range [64,128]")
-
-tf.app.flags.DEFINE_integer('summary_period', 200,
+flags.DEFINE_integer('summary_period', 200,
                             "Number of batches between summary data dumps")
-
-tf.app.flags.DEFINE_integer('random_seed', 0,
+flags.DEFINE_integer('random_seed', 0,
                             "Seed used to initialize rng.")
-
-tf.app.flags.DEFINE_integer('test_vectors', 16,
+flags.DEFINE_integer('test_vectors', 16,
                             """Number of features to use for testing""")
-                            
-tf.app.flags.DEFINE_string('train_dir', 'train',
+flags.DEFINE_string('train_dir', 'train',
                            "Output folder where training logs are dumped.")
-
-tf.app.flags.DEFINE_integer('train_time', 20,
+flags.DEFINE_integer('train_time', 20,
                             "Time in minutes to train the model")
+FLAGS = flags.FLAGS
+
+pp = pprint.PrettyPrinter()
+pp.pprint(flags.FLAGS.__flags)
 
 def prepare_dirs(delete_train_dir=False):
     # Create checkpoint dir (do not delete anything)
@@ -86,7 +73,6 @@ def prepare_dirs(delete_train_dir=False):
     filenames = [os.path.join(FLAGS.dataset, f) for f in filenames]
 
     return filenames
-
 
 def setup_tensorflow():
     # Create session

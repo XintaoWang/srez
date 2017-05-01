@@ -326,7 +326,7 @@ def _discriminator_model(sess, features, disc_input):
     mapsize = 3
     layers  = [64, 128, 256, 512]
 
-    old_vars = tf.all_variables()
+    old_vars = tf.global_variables()
 
     model = Model('DIS', 2*disc_input - 1)
 
@@ -352,7 +352,7 @@ def _discriminator_model(sess, features, disc_input):
     model.add_conv2d(1, mapsize=1, stride=1, stddev_factor=stddev_factor)
     model.add_mean()
 
-    new_vars  = tf.all_variables()
+    new_vars  = tf.global_variables()
     disc_vars = list(set(new_vars) - set(old_vars))
 
     return model.get_output(), disc_vars
@@ -363,7 +363,7 @@ def _generator_model(sess, features, labels, channels):
     mapsize = 3
     res_units  = [256, 128, 96]
 
-    old_vars = tf.all_variables()
+    old_vars = tf.global_variables()
 
     # See Arxiv 1603.05027
     model = Model('GEN', features)
@@ -396,7 +396,7 @@ def _generator_model(sess, features, labels, channels):
     model.add_conv2d(channels, mapsize=1, stride=1, stddev_factor=1.)
     model.add_sigmoid()
     
-    new_vars  = tf.all_variables()
+    new_vars  = tf.global_variables()
     gene_vars = list(set(new_vars) - set(old_vars))
 
     return model.get_output(), gene_vars
